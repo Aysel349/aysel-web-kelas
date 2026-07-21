@@ -347,6 +347,20 @@
         .toast-message.show {
             display: block;
         }
+
+        /* Badge baru untuk bus baru */
+        .badge-new {
+            background: #e74c3c;
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border-radius: 40px;
+            margin-left: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -408,13 +422,17 @@
 
 <script>
     (function() {
-        // ----- DATA BUS -----
+        // ----- DATA BUS (ditambah 3 bus baru Jakarta-Malang) -----
         const busData = [
             { id: 1, name: 'Sinar Jaya', route: 'Jakarta - Bandung', price: 120000 },
             { id: 2, name: 'PO Haryanto', route: 'Jakarta - Surabaya', price: 350000 },
             { id: 3, name: 'Kramat Djati', route: 'Jakarta - Yogyakarta', price: 270000 },
             { id: 4, name: 'Safari Dharma Raya', route: 'Bandung - Surabaya', price: 310000 },
-            { id: 5, name: 'Bintang Mas', route: 'Jakarta - Semarang', price: 225000 }
+            { id: 5, name: 'Bintang Mas', route: 'Jakarta - Semarang', price: 225000 },
+            // BUS BARU: Jakarta - Malang
+            { id: 6, name: 'PO U Trans', route: 'Jakarta - Malang', price: 420000 },
+            { id: 7, name: 'Juragan 99', route: 'Jakarta - Malang', price: 450000 },
+            { id: 8, name: '27 Trans', route: 'Jakarta - Malang', price: 395000 }
         ];
 
         // ----- ELEMEN DOM -----
@@ -438,9 +456,16 @@
                 const item = document.createElement('div');
                 item.className = 'bus-item';
                 item.dataset.id = bus.id;
+                
+                // Tambahkan badge "NEW" untuk 3 bus baru (id 6,7,8)
+                let badgeHtml = '';
+                if (bus.id >= 6 && bus.id <= 8) {
+                    badgeHtml = `<span class="badge-new"><i class="fas fa-star"></i> NEW</span>`;
+                }
+                
                 item.innerHTML = `
                     <div class="bus-info">
-                        <span class="bus-name"><i class="fas fa-bus" style="margin-right: 8px; color:#f1c40f;"></i>${bus.name}</span>
+                        <span class="bus-name"><i class="fas fa-bus" style="margin-right: 8px; color:#f1c40f;"></i>${bus.name} ${badgeHtml}</span>
                         <span class="bus-route"><i class="fas fa-map-pin"></i> ${bus.route}</span>
                     </div>
                     <div class="bus-price"><i class="fas fa-tag"></i> Rp ${bus.price.toLocaleString('id-ID')}</div>
@@ -451,7 +476,7 @@
                     const selectedBus = busData.find(b => b.id === id);
                     if (selectedBus) {
                         busSelect.value = selectedBus.id;
-                        // sedikit highlight
+                        // highlight
                         document.querySelectorAll('.bus-item').forEach(el => el.style.borderLeftColor = '#3498db');
                         this.style.borderLeftColor = '#f1c40f';
                         // Scroll ke form (opsional)
@@ -552,7 +577,7 @@
             // Tampilkan notifikasi sukses
             showToast(`Tiket untuk ${bus.name} berhasil dipesan!`, '#2ecc71');
 
-            // Reset form? (biarkan isian, tapi kita bisa optional)
+            // Reset form (biarkan isian, tapi kita bisa optional)
             // namaPenumpang.value = '';
             // tanggalInput.value = '';
             // jumlahInput.value = 1;
